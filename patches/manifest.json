@@ -24,7 +24,8 @@
     "09",
     "06",
     "05",
-    "08"
+    "08",
+    "10"
   ],
   "patches": [
     {
@@ -211,6 +212,28 @@
       "action": "Apply fixes 1 to 4 and 7 in patches/09-aeo/README.md. Fix 5 is a one-line edit to a DIFFERENT repository and needs no deploy; do it first.",
       "acceptance": "Page contains a single self-contained sentence stating the current record, a visible or sr-only 'verified as of' timestamp, and the JSON-LD carries dateModified plus a numeric variableMeasured value.",
       "notes": "Evidence: on 2026-09-18 an answer engine cited the GitHub repo rather than this page, and quoted 233,402,654 as the record when the live record was 726,763,328. Fix 6 is off-site work for a human, not an engineering task."
+    },
+    {
+      "id": "10",
+      "title": "rank for the quantum safe bitcoin head term",
+      "dir": "patches/10-head-terms",
+      "owner": "starkware-marketing + qsb-page",
+      "impact": "high",
+      "effort_minutes": 30,
+      "design_change": false,
+      "blocked_on_human": true,
+      "human_question": "Who owns starkware.co/blog? Fix 1 is a one-paragraph edit to a StarkWare blog post, not a code change, and needs whoever publishes that blog.",
+      "verify": null,
+      "target_files": [
+        "external: starkware.co blog post",
+        "app/qsb/page.tsx"
+      ],
+      "artifacts": [
+        "patches/10-head-terms/README.md"
+      ],
+      "action": "Fix 1: add a link to qsb.fast from starkware.co's quantum-safe-bitcoin blog post, which ranks #1 for the target query and currently links nowhere near the benchmark. Fix 2a: make the transaction cost figure self-contained and dated on the page. Fix 2b (human, not engineering): brief the outlets that published the $200 figure.",
+      "acceptance": "starkware.co blog post contains a link to qsb.fast, and the /qsb page states the current cost with a verified-as-of date in extractable prose.",
+      "notes": "Do NOT chase the head term directly. Intent is informational and a leaderboard cannot satisfy it. Do not stuff 'quantum bitcoin' into the title, and do not build a competing what-is explainer: it would compete with StarkWare's own #1 result. Evidence in the patch README."
     }
   ]
 }

@@ -82,6 +82,7 @@ Node 18+, no dependencies.
 | [07](patches/07-redirects/) | 307 to 308 on the qsb.fast alias | DNS / Vercel | 2 min | High |
 | [08](patches/08-cache/) | cache headers, **read the caveat first** | QSB page | varies | High |
 | [09](patches/09-aeo/) | AEO: get cited correctly by AI answer engines | QSB page + GitHub repo | 30 min | High |
+| [10](patches/10-head-terms/) | show up for "quantum safe bitcoin" | StarkWare blog + QSB page | 30 min | High |
 
 Patches 03, 04 and 05 are site-wide and belong to whoever owns the Yukon Next.js
 root, not to the QSB challenge specifically. Split them out if the two are
@@ -91,6 +92,11 @@ Patch 09 is the newest and has the sharpest evidence behind it: a live search on
 2026-09-18 showed answer engines citing the GitHub repo instead of this page,
 and quoting a record of 233,402,654 when the actual record was 726,763,328. See
 [patches/09-aeo/](patches/09-aeo/).
+
+Patch 10 has the most surprising finding in the kit: `starkware.co` already
+ranks **#1** for "quantum safe bitcoin" and its blog post contains zero links to
+qsb.fast. The head term does not need to be won, it needs to be forwarded. See
+[patches/10-head-terms/](patches/10-head-terms/).
 
 Patch 08 is the one to not apply blind: `no-store` may be deliberate if any part
 of the page is per-viewer. That patch explains both paths.
