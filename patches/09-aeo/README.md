@@ -184,3 +184,87 @@ honest answer to "what else can we do":
 3. **Fix 4**, schema values. Makes the right number machine-unambiguous.
 4. **Fix 2**, question headings. Free if patch 02 is being done anyway.
 5. **Fix 6**, off-site. Slowest, largest ceiling, not an engineering task.
+
+---
+
+## Second opinion: cs-aeo audit, 2026-09-18
+
+Ran the `cs-aeo` AEO auditor from
+[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills)
+(`marketing-skill/skills/aeo/scripts/aeo_audit.py`, v2.7.3, MIT) against the
+live page, as an independent check on the findings above.
+
+```bash
+python3.11 aeo_audit.py --url https://www.yukon.org/qsb --industry media
+```
+
+Note: it needs Python 3.10+, it uses `str | None` annotations at import time and
+crashes on macOS system Python 3.9.
+
+Headline result: **78/100 (B), PASS** against the media threshold of 70.
+
+| Dimension | Score |
+|---|---|
+| Experience | 47 |
+| Expertise | 91 |
+| Authoritativeness | 97 |
+| Trustworthiness | 97 |
+| Structure | 60 |
+
+### What it confirms
+
+Useful because it was measured by a different tool with different heuristics:
+
+- `h2_count: 0`, `h3_count: 0`. Independent confirmation of the heading finding.
+- `schema_org_jsonld: 0`, `schema_script: 0`, `schema_inline: 0`. Confirms the
+  structured data finding.
+- `author_byline: 0`. Confirms the missing authorship signal.
+
+### What it found that this audit had missed
+
+Four real gaps, all worth acting on:
+
+- **`first_person_evidence: 0` and `dated_example: 0`.** Experience at 47 is by
+  far the weakest dimension, and the diagnosis is right. The page reports
+  measurements but never says, in prose, who ran them, when, or on what. For a
+  page whose entire claim is "we measured this", that is the substantive gap,
+  not a markup one. This is the same problem as fix 1 and fix 3 above, arrived
+  at independently.
+- **`corrections_policy: 0`.** Genuinely apt here, more than on a typical site.
+  A leaderboard that promotes submissions after verification should say what
+  happens when a promoted result is later found invalid. That is a real
+  editorial question, and answering it publicly is a trust signal that also
+  happens to be an AEO one.
+- **`contact_marker: 0`** and **`disclosure: 0`.** No contact route and no
+  disclosure of the StarkWare relationship in page content, though the logo is
+  present.
+
+### What to ignore in its output
+
+Being specific, because the report reads more confidently than it should:
+
+- **The 78/100 is not trustworthy.** Authoritativeness scores 97 while three of
+  its four signals are zero; the dimension is carried entirely by
+  `external_link: 100`, a saturated count. Trustworthiness scores 97 while four
+  of five signals are zero, carried by `https: 96`. Two of five dimensions are
+  inflated by a single maxed-out signal, so the composite is optimistic.
+- **`word_count: 13709` is wrong.** The page has 784 words of visible prose. The
+  script counted raw HTML including the Next.js RSC JSON payload. Anything
+  derived from that number, including part of the structure score, is unreliable.
+- **Its fix #4 recommends `FAQPage` schema. Do not.** Google restricted FAQ rich
+  results to government and health sites in 2023. It earns nothing on this page
+  and adding speculative markup is a small credibility cost. The
+  question-shaped headings in fix 2 above capture the same benefit without it.
+- Its fix #4 also suggests `Article` schema. `Dataset` is the better fit for a
+  benchmark leaderboard, which is what patch 01 uses.
+
+### Net effect on this patch
+
+Fixes 1 to 6 above stand unchanged. Add one:
+
+**Fix 7: publish a corrections and verification policy.** One short page, linked
+from the footer, stating how a submission is verified, what triggers a
+re-verification, and what happens to the leaderboard when a promoted result is
+withdrawn. This is the highest-value item the second tool surfaced, it is cheap,
+and for a benchmark whose selling point is "a score that cannot be gamed" it is
+arguably missing content rather than missing SEO.
