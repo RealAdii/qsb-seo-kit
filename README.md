@@ -63,10 +63,16 @@ Node 18+, no dependencies.
 | [06](patches/06-metadata/) | longer title and description | QSB page | 10 min | Medium |
 | [07](patches/07-redirects/) | 307 to 308 on the qsb.fast alias | DNS / Vercel | 2 min | High |
 | [08](patches/08-cache/) | cache headers, **read the caveat first** | QSB page | varies | High |
+| [09](patches/09-aeo/) | AEO: get cited correctly by AI answer engines | QSB page + GitHub repo | 30 min | High |
 
 Patches 03, 04 and 05 are site-wide and belong to whoever owns the Yukon Next.js
 root, not to the QSB challenge specifically. Split them out if the two are
 different people.
+
+Patch 09 is the newest and has the sharpest evidence behind it: a live search on
+2026-09-18 showed answer engines citing the GitHub repo instead of this page,
+and quoting a record of 233,402,654 when the actual record was 726,763,328. See
+[patches/09-aeo/](patches/09-aeo/).
 
 Patch 08 is the one to not apply blind: `no-store` may be deliberate if any part
 of the page is per-viewer. That patch explains both paths.
@@ -79,7 +85,10 @@ of the page is per-viewer. That patch explains both paths.
 3. **01 and 02** next. These are the two with real upside for a benchmark page:
    they turn published records into machine-readable data and give the page a
    parseable structure.
-4. **06** whenever. **08** after someone confirms the caching question. **05**
+4. **09** fix 5 is two minutes and needs no deploy: add one link to the
+   `quantum-safe-bitcoin-challenge` README pointing at the live leaderboard. Do
+   it whenever, it is independent of everything else.
+5. **06** whenever. **08** after someone confirms the caching question. **05**
    only if the team wants it.
 
 ## What is already good

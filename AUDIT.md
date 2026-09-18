@@ -109,3 +109,18 @@ Worth saying, because the score alone reads worse than the page deserves:
 LCP, INP and CLS. These need a real browser. The TTFB and `no-store` findings
 predict an LCP problem but do not measure one. Run PageSpeed Insights against
 `https://www.yukon.org/qsb` for the field data.
+
+## Addendum: answer engine visibility, 2026-09-18
+
+A live search for the benchmark returned only
+`github.com/Layr-Labs/quantum-safe-bitcoin-challenge` pages. `www.yukon.org/qsb`
+did not rank at all for its own subject.
+
+The generated answer quoted the pinning record as **233,402,654**. The live
+record at that moment was **726,763,328**. The quoted number is a real figure
+from a mid-table leaderboard row, not the record.
+
+So the page is not failing to be crawled. It is being crawled and misread. The
+fixes are in [patches/09-aeo/](patches/09-aeo/), and the cheapest of them is one
+line in a README that currently contains no link back to the live leaderboard at
+all.
