@@ -1,0 +1,106 @@
+// Drop-in for app/qsb/page.tsx (or app/qsb/layout.tsx).
+//
+// Renders NOTHING. A <script type="application/ld+json"> tag has no layout box
+// and no visual output, so this cannot change the design in any way.
+//
+// Usage, anywhere inside the returned tree:
+//   import { QsbJsonLd } from "./JsonLd"
+//   ...
+//   <QsbJsonLd pinningRecord={724568034} subsetRecord={...} />
+//
+// Passing the live records in keeps the structured data honest. If that is
+// awkward to wire up, call it with no props: the Dataset stays valid, it just
+// omits the numeric distribution.
+
+type Props = {
+  pinningRecord?: number
+  subsetRecord?: number
+}
+
+export function QsbJsonLd({ pinningRecord, subsetRecord }: Props) {
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.yukon.org/#website",
+      url: "https://www.yukon.org/",
+      name: "Yukon",
+      description:
+        "The platform for open frontier research. Verifiable benchmarks, open to humans and agents.",
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.yukon.org/#organization",
+      name: "Yukon",
+      url: "https://www.yukon.org/",
+      logo: "https://www.yukon.org/icon.png",
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.yukon.org/qsb#webpage",
+      url: "https://www.yukon.org/qsb",
+      name: "Quantum Safe Bitcoin GPU grinding benchmark",
+      isPartOf: { "@id": "https://www.yukon.org/#website" },
+      about: { "@id": "https://www.yukon.org/qsb#dataset" },
+      primaryImageOfPage: "https://www.yukon.org/qsb/opengraph-image",
+      breadcrumb: { "@id": "https://www.yukon.org/qsb#breadcrumb" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.yukon.org/qsb#breadcrumb",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Yukon", item: "https://www.yukon.org/" },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Quantum Safe Bitcoin",
+          item: "https://www.yukon.org/qsb",
+        },
+      ],
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://www.yukon.org/qsb#dataset",
+      name: "Quantum Safe Bitcoin GPU grinding benchmark results",
+      description:
+        "Verified candidate-throughput records for the Quantum Safe Bitcoin proof-of-work grind, measured across two workloads: pinning and subset-selection. Every reported hit is independently re-derived on CPU before it is scored.",
+      url: "https://www.yukon.org/qsb",
+      keywords: [
+        "Quantum Safe Bitcoin",
+        "GPU grinding",
+        "ECDSA public key recovery",
+        "CUDA benchmark",
+        "proof of work",
+        "pinning",
+        "subset selection",
+      ],
+      license: "https://www.yukon.org/qsb/terms",
+      isAccessibleForFree: true,
+      creator: { "@id": "https://www.yukon.org/#organization" },
+      measurementTechnique:
+        "CPU-verified candidate throughput on a reference NVIDIA RTX 4090",
+      variableMeasured: [
+        pinningRecord != null && {
+          "@type": "PropertyValue",
+          name: "Verified candidate throughput, pinning workload",
+          value: pinningRecord,
+          unitText: "candidates per second",
+        },
+        subsetRecord != null && {
+          "@type": "PropertyValue",
+          name: "Verified candidate throughput, subset-selection workload",
+          value: subsetRecord,
+          unitText: "candidates per second",
+        },
+      ].filter(Boolean),
+    },
+  ]
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({ "@context": "https://schema.org", "@graph": graph }),
+      }}
+    />
+  )
+}

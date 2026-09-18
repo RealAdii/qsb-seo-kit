@@ -1,0 +1,25 @@
+# Static fallback, for public/robots.txt, if app/robots.ts is not preferred.
+# Serve exactly one of the two, never both.
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.yukon.org/sitemap.xml
