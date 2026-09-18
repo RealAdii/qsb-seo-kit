@@ -13,7 +13,8 @@
     "Patch 02 is the only one that touches the DOM; it adds sr-only elements and modifies no existing element.",
     "Do not add FAQPage schema. Google restricted FAQ rich results to government and health sites in 2023.",
     "Do not apply patch 08 without a human answering its blocking question first.",
-    "Never hardcode a benchmark record number. Wire it to live data or omit it."
+    "Never hardcode a benchmark record number. Wire it to live data or omit it.",
+    "Patch 11 is bidirectional: every spoke links to quantum.starkware.co AND the hub links back to the spokes. Adding only inbound links to the hub makes the spokes invisible and undoes patch 10."
   ],
   "order": [
     "07",
@@ -25,7 +26,8 @@
     "06",
     "05",
     "08",
-    "10"
+    "10",
+    "11"
   ],
   "patches": [
     {
@@ -234,6 +236,29 @@
       "action": "Fix 1: add a link to qsb.fast from starkware.co's quantum-safe-bitcoin blog post, which ranks #1 for the target query and currently links nowhere near the benchmark. Fix 2a: make the transaction cost figure self-contained and dated on the page. Fix 2b (human, not engineering): brief the outlets that published the $200 figure.",
       "acceptance": "starkware.co blog post contains a link to qsb.fast, and the /qsb page states the current cost with a verified-as-of date in extractable prose.",
       "notes": "Do NOT chase the head term directly. Intent is informational and a leaderboard cannot satisfy it. Do not stuff 'quantum bitcoin' into the title, and do not build a competing what-is explainer: it would compete with StarkWare's own #1 result. Evidence in the patch README."
+    },
+    {
+      "id": "11",
+      "title": "route the post-quantum cluster through quantum.starkware.co",
+      "dir": "patches/11-quantum-hub",
+      "owner": "starkware-pmm + qsb-page + yukon-team",
+      "impact": "high",
+      "effort_minutes": 45,
+      "design_change": false,
+      "blocked_on_human": true,
+      "human_question": "Two owners are outside the QSB codebase. Who publishes quantum.starkware.co (PMM team) and who can approve an outbound link from www.yukon.org/qsb to a StarkWare domain?",
+      "verify": null,
+      "target_files": [
+        "external: quantum.starkware.co",
+        "external: starkware.co blog post",
+        "app/qsb/page.tsx"
+      ],
+      "artifacts": [
+        "patches/11-quantum-hub/README.md"
+      ],
+      "action": "Build a bidirectional hub-and-spoke: the hub links out to the starkware.co blog post and qsb.fast; both spokes link back to the hub. Vary anchor text. Then give the hub the same JSON-LD and heading treatment as patches 01 and 02.",
+      "acceptance": "All three checks in the patch README return a match: hub contains qsb.fast, blog post contains quantum.starkware.co, qsb.fast contains quantum.starkware.co. All three return nothing today.",
+      "notes": "Do NOT make links one-directional into the hub. Authority flows the way links point; inbound-only makes the hub rank and leaves the spokes invisible, which undoes patch 10. The hub already has robots.txt, sitemap.xml and llms.txt (ahead of yukon.org) but has zero JSON-LD, 110 words and zero h2."
     }
   ]
 }

@@ -83,6 +83,7 @@ Node 18+, no dependencies.
 | [08](patches/08-cache/) | cache headers, **read the caveat first** | QSB page | varies | High |
 | [09](patches/09-aeo/) | AEO: get cited correctly by AI answer engines | QSB page + GitHub repo | 30 min | High |
 | [10](patches/10-head-terms/) | show up for "quantum safe bitcoin" | StarkWare blog + QSB page | 30 min | High |
+| [11](patches/11-quantum-hub/) | link the post-quantum cluster through the Quantum Hub | StarkWare PMM + Yukon | 45 min | High |
 
 Patches 03, 04 and 05 are site-wide and belong to whoever owns the Yukon Next.js
 root, not to the QSB challenge specifically. Split them out if the two are
