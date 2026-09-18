@@ -7,15 +7,43 @@ Drop-in SEO fixes for [qsb.fast](https://qsb.fast), which resolves to
 on the page. See [VERIFY.md](VERIFY.md) for why, and for how to check that claim
 rather than trust it.
 
-## What this is
+## Note to the Yukon / QSB team
 
-An outside audit plus the code to fix what it found. It is **not** a fork of the
-Yukon app: this was put together without access to that repository, from the
-live site. Each patch is a standalone file or diff to lift into the real
-codebase.
+This comes from outside your org, so the most useful thing to say up front is
+what it does **not** touch.
 
-Nothing here has been applied anywhere. Review, take what is useful, ignore the
-rest.
+**Nothing here is structural.** No architecture change, no refactor, no new
+dependency, no change to the harness, the verifier, the scoring, the submission
+flow or anything a solver interacts with. No package is added. No build step is
+introduced. The benchmark itself is not touched at all.
+
+**Nothing here changes the design.** Not a single rendered pixel moves. The one
+exception is the browser tab text in patch 06, and that is called out explicitly
+rather than slipped in. [VERIFY.md](VERIFY.md) explains why each patch is safe
+and, more usefully, how to prove it with a screenshot diff rather than take our
+word for it.
+
+**What it actually does**, in full:
+
+- adds a hidden `<script type="application/ld+json">` block, which has no layout
+  box and paints nothing
+- adds a few `sr-only` headings, which are absolutely positioned at 1px and
+  contribute nothing to layout. No existing element is retagged or modified
+- adds two static files, `robots.txt` and `sitemap.xml`, that do not exist today
+- lengthens the `<title>` and meta description strings
+- flips one Vercel redirect from 307 to 308, most likely a dashboard toggle
+- raises one question about cache headers, and deliberately does **not**
+  prescribe a fix, because the right answer depends on something only you know
+
+**Nothing has been applied anywhere.** This is a proposal, not a pull request.
+Every patch is a standalone file to lift in, ignore, or disagree with. Two of
+them are marked `blocked_on_human` precisely because guessing would be worse
+than asking.
+
+Written from the live site with no access to your repository, so treat anything
+about your internal file layout as a best guess. The findings themselves were
+all measured against the live page and are reproducible with
+`node scripts/check-seo.mjs`.
 
 ## If you are an agent
 
