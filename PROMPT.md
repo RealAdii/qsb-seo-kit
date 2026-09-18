@@ -61,8 +61,8 @@ record was 726,763,328, because a three-week-old PR looks as current as today's.
 Review the SEO and AEO audit at https://github.com/RealAdii/qsb-seo-kit against
 this codebase.
 
-Read AUDIT.md for the findings, patches/09-aeo/ for the answer-engine analysis,
-and STRATEGY.md for what goes beyond fixing the audit.
+Read AUDIT.md for the findings and patches/09-aeo/ for the answer-engine
+analysis.
 
 For each of the 9 patches in patches/manifest.json, tell me:
 - whether the problem it describes is actually present in this codebase

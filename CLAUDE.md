@@ -116,7 +116,6 @@ Do not report a patch as applied unless its `acceptance` criterion from
 ## If you are not applying patches
 
 If you were asked to review rather than implement: `AUDIT.md` has the findings
-and the evidence, `patches/09-aeo/` has the answer-engine analysis, and
-`STRATEGY.md` covers what this page would need beyond fixing the audit. Start
+and the evidence, and `patches/09-aeo/` has the answer-engine analysis. Start
 with `AUDIT.md`.
 <!-- This file intentionally mirrors AGENTS.md so Claude Code, Cursor and Codex all find the brief. Edit AGENTS.md and copy. -->
