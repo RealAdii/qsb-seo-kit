@@ -19,6 +19,8 @@ rest.
 
 ## Start here
 
+- **[STRATEGY.md](STRATEGY.md)**: the patches get this page to A tier. What S
+  tier would actually take, and why most of it is not SEO work.
 - **[AUDIT.md](AUDIT.md)**: what was measured, what it scored, and why. 54/100.
 - **[VERIFY.md](VERIFY.md)**: the zero-design-change argument and how to test it.
 - **`scripts/check-seo.mjs`**: reproduces the whole audit against any URL.
