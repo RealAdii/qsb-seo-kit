@@ -17,6 +17,24 @@ codebase.
 Nothing here has been applied anywhere. Review, take what is useful, ignore the
 rest.
 
+## If you are an agent
+
+Read **[AGENTS.md](AGENTS.md)** first, then **[patches/manifest.json](patches/manifest.json)**
+for the ordered task list with target files and acceptance criteria.
+
+```bash
+node scripts/check-seo.mjs https://qsb.fast --json     # machine-readable state
+node scripts/check-seo.mjs https://qsb.fast --patch 02 # one patch's check
+node scripts/check-seo.mjs https://qsb.fast --ci       # exit 1 on failure
+```
+
+Two patches are marked `blocked_on_human` and must not be applied without asking.
+
+## If you are a human
+
+**[PROMPT.md](PROMPT.md)** has copy-paste prompts to hand your agent: apply
+everything, do the two-minute one, review only, or just check current state.
+
 ## Start here
 
 - **[STRATEGY.md](STRATEGY.md)**: the patches get this page to A tier. What S

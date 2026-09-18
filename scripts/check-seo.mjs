@@ -5,17 +5,28 @@
 //   node scripts/check-seo.mjs                          # defaults to qsb.fast
 //   node scripts/check-seo.mjs https://staging.example  # any origin
 //   node scripts/check-seo.mjs --ci                     # exit 1 on failure
+//   node scripts/check-seo.mjs --json                   # machine-readable, for agents
+//   node scripts/check-seo.mjs --patch 02               # only that patch's check
 //
 // Node 18+ (uses global fetch). No dependencies.
 
 const args = process.argv.slice(2)
 const CI = args.includes("--ci")
-const START = args.find((a) => !a.startsWith("--")) ?? "https://qsb.fast"
+const JSON_OUT = args.includes("--json")
+const patchIdx = args.indexOf("--patch")
+const ONLY = patchIdx !== -1 ? args[patchIdx + 1] : null
+const START =
+  args.filter((a, i) => !a.startsWith("--") && i !== patchIdx + 1)[0] ?? "https://qsb.fast"
 
 const results = []
-const ok = (n, d) => results.push({ s: "PASS", n, d })
-const bad = (n, d) => results.push({ s: "FAIL", n, d })
-const warn = (n, d) => results.push({ s: "WARN", n, d })
+const push = (s, n, d) => {
+  const patch = (n.match(/^(\d{2})/) || [])[1] ?? null
+  if (ONLY && patch !== ONLY) return
+  results.push({ status: s, patch, check: n, detail: d })
+}
+const ok = (n, d) => push("PASS", n, d)
+const bad = (n, d) => push("FAIL", n, d)
+const warn = (n, d) => push("WARN", n, d)
 
 // Follow the redirect chain by hand so we can grade each hop.
 async function chain(url) {
@@ -179,17 +190,38 @@ if (found.length) bad("rendered markdown", `source syntax leaked as text: ${foun
 else ok("rendered markdown", "no leaked markdown in rendered prose")
 
 // ---------- report ----------
-console.log(`\n  ${START}  ->  ${finalUrl}\n`)
-for (const h of hops) {
-  console.log(`  ${String(h.status).padEnd(4)} ${h.url}${h.location ? `  ->  ${h.location}` : ""}`)
+const fails = results.filter((r) => r.status === "FAIL").length
+const warns = results.filter((r) => r.status === "WARN").length
+const passes = results.length - fails - warns
+
+if (JSON_OUT) {
+  console.log(
+    JSON.stringify(
+      {
+        start: START,
+        resolved: finalUrl,
+        hops: hops.map((h) => ({ url: h.url, status: h.status, location: h.location ?? null })),
+        summary: { passed: passes, warnings: warns, failed: fails },
+        results,
+      },
+      null,
+      2
+    )
+  )
+} else {
+  console.log(`\n  ${START}  ->  ${finalUrl}\n`)
+  for (const h of hops) {
+    console.log(
+      `  ${String(h.status).padEnd(4)} ${h.url}${h.location ? `  ->  ${h.location}` : ""}`
+    )
+  }
+  console.log("")
+  const pad = Math.max(...results.map((r) => r.check.length), 0)
+  for (const r of results) {
+    const mark = r.status === "PASS" ? "  ok  " : r.status === "WARN" ? " warn " : " FAIL "
+    console.log(`  [${mark}] ${r.check.padEnd(pad)}  ${r.detail}`)
+  }
+  console.log(`\n  ${passes} passed, ${warns} warnings, ${fails} failed\n`)
 }
-console.log("")
-const pad = Math.max(...results.map((r) => r.n.length))
-for (const r of results) {
-  const mark = r.s === "PASS" ? "  ok  " : r.s === "WARN" ? " warn " : " FAIL "
-  console.log(`  [${mark}] ${r.n.padEnd(pad)}  ${r.d}`)
-}
-const fails = results.filter((r) => r.s === "FAIL").length
-const warns = results.filter((r) => r.s === "WARN").length
-console.log(`\n  ${results.length - fails - warns} passed, ${warns} warnings, ${fails} failed\n`)
+
 if (CI && fails) process.exit(1)
